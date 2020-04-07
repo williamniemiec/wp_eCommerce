@@ -42,17 +42,17 @@ This is a project about a website for e-Commerce. It is not a complete e-commerc
 
 ## Application photos
 #### Home
-![home](https://github.com/williamniemiec/wp_eCommerce/tree/master/media/app/home.PNG?raw=true)
+![home](https://github.com/williamniemiec/wp_eCommerce/blob/master/media/logo/home.png?raw=true)
 #### About
-![about](https://github.com/williamniemiec/wp_eCommerce/tree/master/media/app/about.PNG?raw=true)
+![about](https://github.com/williamniemiec/wp_eCommerce/blob/master/media/app/about.png?raw=true)
 #### Register
-![register](https://github.com/williamniemiec/wp_eCommerce/tree/master/media/app/register.PNG?raw=true)
-![register_success](https://github.com/williamniemiec/wp_eCommerce/tree/master/media/app/register-success.PNG?raw=true)
+![register](https://github.com/williamniemiec/wp_eCommerce/blob/master/media/app/register.png?raw=true)
+![register_success](https://github.com/williamniemiec/wp_eCommerce/blob/master/media/app/register-success.png?raw=true)
 #### MyAds
-![myAds](https://github.com/williamniemiec/wp_eCommerce/tree/master/media/app/myAds.PNG?raw=true)
+![myAds](https://github.com/williamniemiec/wp_eCommerce/blob/master/media/app/myAds.png?raw=true)
 #### EditAd
-![editAd](https://github.com/williamniemiec/wp_eCommerce/tree/master/media/app/editAd.PNG?raw=true)
+![editAd](https://github.com/williamniemiec/wp_eCommerce/blob/master/media/app/editAd.png?raw=true)
 #### AddAd
-![addAd](https://github.com/williamniemiec/wp_eCommerce/tree/master/media/app/addAd.PNG?raw=true)
+![addAd](https://github.com/williamniemiec/wp_eCommerce/blob/master/media/app/addAd.png?raw=true)
 #### Ad
-![ad](https://github.com/williamniemiec/wp_eCommerce/tree/master/media/app/ad.PNG?raw=true)
+![ad](https://github.com/williamniemiec/wp_eCommerce/blob/master/media/app/ad.png?raw=true)
