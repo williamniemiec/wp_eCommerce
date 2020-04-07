@@ -9,6 +9,9 @@ use \core\Model;
  */
 class User extends Model 
 {
+    //-----------------------------------------------------------------------
+    //        Methods
+    //-----------------------------------------------------------------------
     /**
      * Registers a new user in database users table.
      * 

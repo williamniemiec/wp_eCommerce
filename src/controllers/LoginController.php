@@ -5,8 +5,17 @@ use \core\Controller;
 use \models\User;
 
 
+/**
+ * Responsible for login view behavior.
+ */
 class LoginController extends Controller 
 {
+    //-----------------------------------------------------------------------
+    //        Methods
+    //-----------------------------------------------------------------------
+    /*
+     @Override
+     */
 	public function index()
 	{
 	    $error = false;
@@ -33,6 +42,9 @@ class LoginController extends Controller
 		$this->loadTemplate('login', $data);
 	}
 
+	/**
+	 * Logouts current user.
+	 */
 	public function logout()
 	{
 		unset($_SESSION['userID']);

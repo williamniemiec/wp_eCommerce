@@ -6,21 +6,37 @@ use \models\Ad;
 use \models\User;
 
 
-class ProductController extends Controller {
+/**
+ * Responsible for product view behavior.
+ */
+class ProductController extends Controller 
+{
+    //-----------------------------------------------------------------------
+    //        Methods
+    //-----------------------------------------------------------------------
+    /*
+     @Override
+     */
 	public function index() { }
 
-	public function open($id){
+	/**
+	 * Opens the product with the specified id.
+	 * 
+	 * @param int $id Id of the product
+	 */
+	public function open($id)
+	{
 		$ad = new Ad();
 		$user = new User();
 
-		if(!empty($id)){
+		if (!empty($id)) {
 		    $id = addslashes($id);
 		} else {
 			header("Location: ".BASE_URL);
 			exit;
 		}
 
-		if(isset($_SESSION['userID']) && !empty($_SESSION['userID'])){
+		if (isset($_SESSION['userID']) && !empty($_SESSION['userID'])) {
 			$name = $user->getName($_SESSION['userID']);
 		} else {
 			$name = '';
@@ -44,6 +60,7 @@ class ProductController extends Controller {
 		    'isOwner' => isset($_SESSION['userID']) && $adInfo['id_user'] == $_SESSION['userID'],
 			'firstTime' => $firstTime
 		);
+		
 		$this->loadTemplate("product", $data);
 	}
 }

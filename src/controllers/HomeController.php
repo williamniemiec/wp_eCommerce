@@ -8,13 +8,16 @@ use \models\Category;
 
 
 /**
- * Main controller. It will be responsible for site's main pase behavior.
+ * Main controller. It will be responsible for site's main page behavior.
  */
 class HomeController extends Controller 
 {
-    #-----------------------------------------------------------------------
-    #        Methods
-    #-----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
+    //        Methods
+    //-----------------------------------------------------------------------
+    /*
+     @Override
+     */
 	public function index ()
 	{
 		$ad = new Ad();
@@ -61,6 +64,11 @@ class HomeController extends Controller
 		$this->loadTemplate("home", $params);
 	}
 	
+	/**
+	 * Checks if the user was successfully registered.
+	 * 
+	 * @return boolean If the user has been successfully registered
+	 */
 	public function wasSuccessfullyRegistered()
 	{
 	    if (!isset($_SESSION['user_successfully_registered']))

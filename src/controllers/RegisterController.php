@@ -5,8 +5,17 @@ use \core\Controller;
 use \models\User;
 
 
+/**
+ * Responsible for register view behavior.
+ */
 class RegisterController extends Controller 
 {
+    //-----------------------------------------------------------------------
+    //        Methods
+    //-----------------------------------------------------------------------
+    /*
+     @Override
+     */
 	public function index()
 	{
 	    $error = false;

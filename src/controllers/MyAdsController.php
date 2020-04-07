@@ -7,9 +7,17 @@ use models\User;
 use models\Category;
 
 
+/**
+ * Responsible for my ads view behavior.
+ */
 class MyAdsController extends Controller
 {
-
+    //-----------------------------------------------------------------------
+    //        Methods
+    //-----------------------------------------------------------------------
+    /*
+     @Override
+     */
     public function index()
     {
         if (empty($_SESSION['userID'])) {
@@ -37,6 +45,9 @@ class MyAdsController extends Controller
         $this->loadTemplate('myAds', $data);
     }
 
+    /**
+     * Adds an ad.
+     */
     public function add()
     {
         $ad = new Ad();
@@ -52,10 +63,10 @@ class MyAdsController extends Controller
             $state = intval($_POST['state']);
             $id_category = intval($_POST['category']);
             $imgs = $_FILES['img'];
-            // $imgsPath = $ad->savePhotos($imgs);
 
             try {
                 $_SESSION['ad_add_success'] = $ad->add($id_user, $title, $description, $price, $state, $id_category, $imgs);
+                
                 if ($_SESSION['ad_add_success'] == true) {
                     header("Location: " . BASE_URL."myAds");
                     exit();
@@ -75,6 +86,11 @@ class MyAdsController extends Controller
         $this->loadTemplate('addAd', $data);
     }
 
+    /**
+     * Deletes ad with the specified id.
+     * 
+     * @param int $id
+     */
     public function delete($id)
     {
         $ad = new Ad();
@@ -86,6 +102,11 @@ class MyAdsController extends Controller
         header('Location: ' . BASE_URL);
     }
 
+    /**
+     * Edits ad with the specified id.
+     *
+     * @param int $id_ad
+     */
     public function edit($id_ad)
     {
         if (empty($id_ad) || empty($_SESSION['userID'])) {
@@ -95,7 +116,7 @@ class MyAdsController extends Controller
         $error = false;
         $error_msg = "";
         
-        // Verifica se foi enviado o form
+        // Checks it the form was sent
         if (isset($_POST['title']) && ! empty($_POST['title']) && isset($_POST['price']) && ! empty($_POST['price'])) {
             try {
                 $this->saveEdition($id_ad);
@@ -133,16 +154,26 @@ class MyAdsController extends Controller
         $this->loadTemplate('editAd', $data);
     }
 
+    /**
+	 * Checks if the add was successfully registered.
+	 * 
+	 * @return boolean If the ad was successfully registered
+	 */
     private function wasAdSuccessfullyAdded()
     {
         if (!isset($_SESSION['ad_add_success']))
             return false;
             
-            unset($_SESSION['ad_add_success']);
-            
-            return true;
+        unset($_SESSION['ad_add_success']);
+        
+        return true;
     }
     
+    /**
+     * Checks if the add was successfully edited.
+     *
+     * @return boolean If the ad was successfully edited
+     */
     private function wasAdSuccessfullyEdited()
     {
         if (!isset($_SESSION['ad_edit_success']))
@@ -153,6 +184,12 @@ class MyAdsController extends Controller
         return true;
     }
     
+    /**
+     * Saves edited ad.
+     * 
+     * @param int $id_ad Id of the edited ad
+     * @throws Exception If an error occurs while saving ad
+     */
     private function saveEdition($id_ad)
     {
         if (!isset($_POST['title']) || empty($_POST['title']) || !isset($_POST['price']) || empty($_POST['price'])) {
@@ -181,7 +218,6 @@ class MyAdsController extends Controller
             }                
         }
 
-        //$imgsPath = $ad->savePhotos($_FILES['img'], $id_ad);
         $ad->savePhotos($_FILES['img'], $id_ad);
         $ad->edit($id_ad, $title, $description, $price, $id_category, $state);
     }
