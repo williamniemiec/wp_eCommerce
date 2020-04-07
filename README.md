@@ -1,5 +1,5 @@
 # [Website Project] e-Commerce
-![e-Commerce logo]( https://github.com/williamniemiec/wp_eCommerce/tree/master/media/logo/logo.jpg?raw=true)
+![e-Commerce logo]( https://github.com/williamniemiec/wp_eCommerce/blob/master/media/logo/logo.jpg)
 
 This is a project about a website for e-Commerce. It is not a complete e-commerce system, however it serves as a basis for building one. This project uses [MVC pattern](https://github.com/williamniemiec/MVC-in-PHP), made in PHP.
 
@@ -42,7 +42,7 @@ This is a project about a website for e-Commerce. It is not a complete e-commerc
 
 ## Application photos
 #### Home
-![home](https://github.com/williamniemiec/wp_eCommerce/blob/master/media/logo/home.png?raw=true)
+![home](https://github.com/williamniemiec/wp_eCommerce/blob/master/media/app/home.png?raw=true)
 #### About
 ![about](https://github.com/williamniemiec/wp_eCommerce/blob/master/media/app/about.png?raw=true)
 #### Register
