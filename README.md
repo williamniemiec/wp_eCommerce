@@ -5,6 +5,12 @@ This is a project about a website for e-Commerce. It is not a complete e-commerc
 
 <hr />
 
+## Requirements
+- password_strength
+- jQuery
+- Bootstrap 4
+- Adblock disabled in the page (this is because adblock blocks urls with 'ad' in the name)
+
 ## Project organization
 ![](https://github.com/williamniemiec/wp_eCommerce/tree/master/media/uml/uml.png?raw=true)
 
@@ -41,6 +47,7 @@ This is a project about a website for e-Commerce. It is not a complete e-commerc
 ![about](https://github.com/williamniemiec/wp_eCommerce/tree/master/media/app/about.PNG?raw=true)
 #### Register
 ![register](https://github.com/williamniemiec/wp_eCommerce/tree/master/media/app/register.PNG?raw=true)
+![register_success](https://github.com/williamniemiec/wp_eCommerce/tree/master/media/app/register-success.PNG?raw=true)
 #### MyAds
 ![myAds](https://github.com/williamniemiec/wp_eCommerce/tree/master/media/app/myAds.PNG?raw=true)
 #### EditAd

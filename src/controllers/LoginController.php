@@ -36,6 +36,7 @@ class LoginController extends Controller
 	    }
 	    
 	    $data = array(
+	        'title' => "E-commerce - Login",
 	        'error' => $error
 	    );
 	    
