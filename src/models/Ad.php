@@ -3,33 +3,9 @@ namespace models;
 
 use core\Model;
 
-function imageToJpg($maxWidth, $maxHeight, $originalExtension, $filepath)
-{
-    list ($width_orig, $height_orig) = getimagesize($filepath);
-    $ratio = $width_orig / $height_orig;
-
-    if ($maxWidth / $maxHeight > $ratio) { // Aumenta largura
-        $maxWidth = $maxHeight * $ratio;
-    } else { // Aumenta altura
-        $maxHeight = $maxWidth / $ratio;
-    }
-
-    // Redimenciona imagem
-    $img = imagecreatetruecolor($maxWidth, $maxHeight);
-    if ($originalExtension == 'jpeg') {
-        $original = imagecreatefromjpeg($filepath);
-    } else {
-        $original = imagecreatefrompng($filepath);
-    }
-
-    imagecopyresampled($img, $original, 0, 0, 0, 0, $maxWidth, $maxHeight, $width_orig, $height_orig);
-
-    imagejpeg($img, $filepath, 80);
-}
 
 class Ad extends Model
 {
-
     public function getMyAds()
     {
         $sql = $this->db->query("
@@ -348,5 +324,29 @@ class Ad extends Model
 
         return $sql->rowCount();
     }
+    
+    
+    private function imageToJpg($maxWidth, $maxHeight, $originalExtension, $filepath)
+    {
+        list ($width_orig, $height_orig) = getimagesize($filepath);
+        $ratio = $width_orig / $height_orig;
+        
+        if ($maxWidth / $maxHeight > $ratio) { // Aumenta largura
+            $maxWidth = $maxHeight * $ratio;
+        } else { // Aumenta altura
+            $maxHeight = $maxWidth / $ratio;
+        }
+        
+        // Redimenciona imagem
+        $img = imagecreatetruecolor($maxWidth, $maxHeight);
+        if ($originalExtension == 'jpeg') {
+            $original = imagecreatefromjpeg($filepath);
+        } else {
+            $original = imagecreatefrompng($filepath);
+        }
+        
+        imagecopyresampled($img, $original, 0, 0, 0, 0, $maxWidth, $maxHeight, $width_orig, $height_orig);
+        
+        imagejpeg($img, $filepath, 80);
+    }
 }
-?>

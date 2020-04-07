@@ -11,4 +11,3 @@ class Category extends Model {
         return $sql;
     }
 }
-?>
