@@ -4,10 +4,21 @@ namespace models;
 use \core\Model;
 
 
-class Category extends Model {
-    public function getCategories(){
+/**
+ * Responsible for manipulating the database ads_category table.
+ */
+class Category extends Model 
+{
+    /**
+     * Returns all registered categories.
+     * 
+     * @return array All registered categories or null if there are none
+     */
+    public function getCategories()
+    {
         $sql = $this->db->query('SELECT * FROM categories');
         $sql = $sql->fetchAll();
+        
         return $sql;
     }
 }

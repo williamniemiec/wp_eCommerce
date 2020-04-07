@@ -4,19 +4,38 @@ namespace models;
 use core\Model;
 
 
+/**
+ * Responsible for manipulating the database ads table (and ads_images).
+ */
 class Ad extends Model
 {
+    /**
+     * Returns all ads belonging to the logged user.
+     * 
+     * @return array Ads of the logged user or null if the user has not registered ads
+     */
     public function getMyAds()
     {
         $sql = $this->db->query("
             SELECT *,
             (select ads_images.url from ads_images where ads_images.id_ad = ads.id limit 1) as url 
             FROM ads 
-            WHERE id_user = " . $_SESSION['userID']);
+            WHERE id_user = " . $_SESSION['userID']
+        );
 
         return $sql->fetchAll();
     }
 
+    /**
+     * Returns registered ads according to the specified parameters.
+     * 
+     * @apiNote Used for pagination
+     * @param int $page Current page
+     * @param int $totAdsDisplayedPerPage Number of ads displayed in the page
+     * @param array $filters Filters that the ads will be submitted
+     * @return array Registered ads with the specifications or null if there are not ads
+     * with the specified parameters
+     */
     public function getAds($page, $totAdsDisplayedPerPage, $filters)
     {
         $response = array();
@@ -24,16 +43,15 @@ class Ad extends Model
             '1=1'
         );
 
-        // Paginação
-        // -1 pq paginação começa em zero, mas visualmente em 1
-        $offset = ($page - 1) * $totAdsDisplayedPerPage;
+        // Pagination
+        $offset = ($page - 1) * $totAdsDisplayedPerPage;    // -1 because pagination starts in zero, but visually in 1
 
-        // Verifica filters
+        // Verifies filters
         if (! empty($filters['category'])) {
             $arrayFilters[] = "ads.id_category = :id_category";
         }
 
-        if (! empty($filters['price'])) {
+        if (!empty($filters['price'])) {
             if ($filters['price'] == '500+') {
                 $arrayFilters[] = "ads.price >= :price";
             } else {
@@ -45,6 +63,7 @@ class Ad extends Model
             $arrayFilters[] = "ads.state = :state";
         }
 
+        // Gets ads
         $sql = $this->db->prepare("SELECT *, 
             (select ads_images.url from ads_images where ads_images.id_ad = ads.id limit 1) as url, 
             (select categories.name from categories where categories.id = ads.id_category) as category 
@@ -53,11 +72,11 @@ class Ad extends Model
             ORDER BY id DESC 
             LIMIT $offset, $totAdsDisplayedPerPage");
 
-        if (! empty($filters['category'])) {
+        if (!empty($filters['category'])) {
             $sql->bindValue(':id_category', $filters['category']);
         }
 
-        if (! empty($filters['price'])) {
+        if (!empty($filters['price'])) {
             if ($filters['price'] == '500+') {
                 $sql->bindValue(':price', 500);
             } else {
@@ -80,11 +99,25 @@ class Ad extends Model
         return $response;
     }
 
+    /**
+     * Returns the total number of pages that must exist to display ads 
+     * with a fixed number of ads per page.
+     * 
+     * @param int $totAdsDisplayedPerPage Number of ads displayed per page
+     * @param int $totAds Total of ads
+     * @return int Total of pages
+     */
     public function totPages($totAdsDisplayedPerPage, $totAds)
     {
         return ceil($totAds / $totAdsDisplayedPerPage);
     }
 
+    /**
+     * Returns ad with the specified id.
+     * 
+     * @param int $id_ad Id of the ad
+     * @return array Ad with the specified if or null if it not exist
+     */
     public function getAd($id_ad)
     {
         $response = array();
@@ -103,6 +136,18 @@ class Ad extends Model
         return $response;
     }
 
+    /**
+     * Registers a new ad.
+     * 
+     * @param int $id_user Id of the user
+     * @param string $title Title of the ad
+     * @param string $description Description of the ad
+     * @param float $price Price of the ad
+     * @param int $state State of the ad
+     * @param int $id_category Category of the ad
+     * @param array $imgs Images of the ad
+     * @return boolean If ad was successfully registered in database
+     */
     public function add($id_user, $title, $description, $price, $state, $id_category, $imgs)
     {
         $sql = $this->db->prepare('INSERT INTO ads SET id_user = :userId, id_category = :id_category, title = :title, description = :description, price = :price, state = :state');
@@ -122,36 +167,50 @@ class Ad extends Model
     }
 
     // Recebe array do form imgs e retorna array com paths das imagens
+    /**
+     * Saves ad photos in database and in the server.
+     * 
+     * @param array $arrayImgs Images of the ad
+     * @param int $id_ad Id of the ad
+     * @return boolean If the images were successfully added
+     */
     public function savePhotos($arrayImgs, $id_ad)
     {
         $totFiles = count($arrayImgs['tmp_name']);
-        $imgs = array();
 
         for ($i = 0; $i < $totFiles; $i ++) {
-            if (! empty($arrayImgs['tmp_name'][$i]) && ($arrayImgs['type'][$i] == 'image/jpeg' || $arrayImgs['type'][$i] == 'image/png')) {
-                $filename = md5(time() . rand(0, 100));
-                $extension = explode('/', $arrayImgs['type'][$i])[1];
-                // $filepath = 'assets/images/ads/'.$filename.'.'.$extension;
-                $filepath = 'assets/images/ads/' . $filename . '.jpg';
-                move_uploaded_file($arrayImgs['tmp_name'][$i], $filepath);
-                array_push($imgs, $filepath); // $imgs = $filepath
-
-                // Redimenciona imagem se for muito grande para 500x500 e salva como .jpg
-                imageToJpg(500, 500, $extension, $filepath);
-
-                // Insere imagem no banco de dados
-                $sql = $this->db->prepare("INSERT INTO ads_images SET id_ad = :id_ad, url = :url");
-                $sql->bindValue(':id_ad', $id_ad);
-                $sql->bindValue(':url', $filepath);
-                $sql->execute();
-            } else {
-                return null;
+            // Checks if there is an invalid photo
+            if ( empty($arrayImgs['tmp_name'][$i]) || 
+                !($arrayImgs['type'][$i] == 'image/jpeg' || $arrayImgs['type'][$i] == 'image/png') ) {
+                return false;
             }
+            
+            $filename = md5(time() . rand(0, 100));
+            $extension = explode('/', $arrayImgs['type'][$i])[1];
+            
+            $filepath = 'assets/images/ads/' . $filename . '.jpg';
+            move_uploaded_file($arrayImgs['tmp_name'][$i], $filepath);
+
+            // Resize image if too large to 500x500 and save as .jpg
+            imageToJpg(500, 500, $extension, $filepath);
+
+            // Insert image into the database
+            $sql = $this->db->prepare("INSERT INTO ads_images SET id_ad = :id_ad, url = :url");
+            $sql->bindValue(':id_ad', $id_ad);
+            $sql->bindValue(':url', $filepath);
+            $sql->execute(); 
         }
 
-        return $imgs;
+        return true;
     }
 
+    /**
+     * Returns all images of an ad with the the specified id.
+     * 
+     * @param int $id_ad Id of the ad
+     * @return array Images of the ad or null if there are not registered images
+     * of this ad
+     */
     public function getImages($id_ad)
     {
         $response = array();
@@ -165,6 +224,12 @@ class Ad extends Model
         return $response;
     }
 
+    /**
+     * Returns title of an ad with the the specified id.
+     * 
+     * @param int $id_ad Id of the ad
+     * @return string Title of the ad of empty string if the ad does not exist
+     */
     public function getTitle($id_ad)
     {
         $title = '';
@@ -178,6 +243,12 @@ class Ad extends Model
         return $title;
     }
 
+    /**
+     * Returns description of an ad with the the specified id.
+     * 
+     * @param int $id_ad Id of the ad
+     * @return string Description of the ad of empty string if the ad does not exist
+     */
     public function getDescription($id_ad)
     {
         $desc = '';
@@ -191,6 +262,12 @@ class Ad extends Model
         return $desc;
     }
 
+    /**
+     * Returns price of an ad with the the specified id.
+     *
+     * @param int $id_ad Id of the ad
+     * @return float Price of the ad of 0 if the ad does not exist
+     */
     public function getPrice($id_ad)
     {
         $price = 0;
@@ -204,6 +281,12 @@ class Ad extends Model
         return $price;
     }
 
+    /**
+     * Returns state of an ad with the the specified id.
+     *
+     * @param int $id_ad Id of the ad
+     * @return int State of the ad of -1 if the ad does not exist
+     */
     public function getState($id_ad)
     {
         $state = - 1;
@@ -216,6 +299,16 @@ class Ad extends Model
         return $state;
     }
 
+    /**
+     * Edits an ad.
+     * 
+     * @param int $id_ad Id of the ad
+     * @param string $title Title of the ad
+     * @param string $description Description of the ad
+     * @param float $price Price of the ad
+     * @param int $id_category Category of the ad
+     * @param int $state State of the ad
+     */
     public function edit($id_ad, $title, $description, $price, $id_category, $state)
     {
         $sql = $this->db->prepare("UPDATE ads SET title = :title, description = :description, price = :price, state = :state, id_category = :id_category WHERE id = :id_ad");
@@ -229,6 +322,12 @@ class Ad extends Model
         $sql->execute();
     }
 
+    /**
+     * Delete an image with the specified id.
+     * 
+     * @param int $id_img Id of the image
+     * @return int Id of the deleted image or 0 if it does not exist
+     */
     public function deleteImg($id_img)
     {
         $id_ad = 0;
@@ -253,6 +352,11 @@ class Ad extends Model
         return $id_ad;
     }
 
+    /**
+     * Deletes an ad.
+     * 
+     * @param int $id_ad Id of the ad
+     */
     public function delete($id_ad)
     {
         $sql = $this->db->prepare("DELETE FROM ads_images WHERE id_ad = :id_ad");
@@ -264,15 +368,30 @@ class Ad extends Model
         $sql->execute();
     }
 
+    /**
+     * Returns id of the ad with the specified id.
+     * 
+     * @param int $id_ad Id of the ad
+     * @return int Id of the category or -1 it the ad does not exist
+     */
     public function getCategory($id_ad)
     {
+        $response = -1;
         $sql = $this->db->query("SELECT id_category FROM ads WHERE id = " . $id_ad);
         $Ad = $sql->fetch();
-
-        return $Ad['id_category'];
+        
+        if ($Ad != null)
+            $response = $Ad['id_category'];
+        
+        return $response;
     }
 
-    
+    /**
+     * Returns total of registered ads with the specified filters.
+     * 
+     * @param array $filters Filters that will filter ads
+     * @return int Number of registered ads with the specified filters
+     */
     public function countAds($filters = array(
         'category' => '',
         'price' => '',
@@ -325,19 +444,26 @@ class Ad extends Model
         return $sql->rowCount();
     }
     
-    
+    /**
+     * Converts an image to jpeg and resizes it.
+     * 
+     * @param int $maxWidth Max width of the image
+     * @param int $maxHeight Max height of the image
+     * @param string $originalExtension Extension of the source image
+     * @param string $filepath Path where the image will be saved
+     */
     private function imageToJpg($maxWidth, $maxHeight, $originalExtension, $filepath)
     {
         list ($width_orig, $height_orig) = getimagesize($filepath);
         $ratio = $width_orig / $height_orig;
         
-        if ($maxWidth / $maxHeight > $ratio) { // Aumenta largura
+        if ($maxWidth / $maxHeight > $ratio) { // Increases width
             $maxWidth = $maxHeight * $ratio;
-        } else { // Aumenta altura
+        } else { // Increases height
             $maxHeight = $maxWidth / $ratio;
         }
         
-        // Redimenciona imagem
+        // Resizes image
         $img = imagecreatetruecolor($maxWidth, $maxHeight);
         if ($originalExtension == 'jpeg') {
             $original = imagecreatefromjpeg($filepath);
