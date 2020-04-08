@@ -6,7 +6,7 @@ This is a project about a website for e-Commerce. It is not a complete e-commerc
 <hr />
 
 ## Requirements
-- password_strength
+- [password_strength](https://github.com/williamniemiec/password-strength)
 - jQuery
 - Bootstrap 4
 - Adblock disabled in the page (this is because adblock blocks urls with 'ad' in the name)
