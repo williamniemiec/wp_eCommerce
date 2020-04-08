@@ -28,6 +28,7 @@ This is a project about a website for e-Commerce. It is not a complete e-commerc
 | assets| `Directory`| Contains all application content files
 | controllers | `Directory`| Contains all application controller classes
 | core | `Directory`| Contains the classes responsable for the MVC operations
+| db | `Directory`| Contains the database of the application
 | models | `Directory`| Contains all application model classes
 | vendor| `Directory`| Folder created by Composer - responsable for classes autoload
 | views | `Directory`| Contains all application view classes
