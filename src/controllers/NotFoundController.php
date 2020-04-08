@@ -2,6 +2,7 @@
 namespace controllers;
 
 use \core\Controller;
+use \models\User;
 
 
 /**
@@ -17,6 +18,19 @@ class NotFoundController extends Controller
      */
 	public function index()
 	{
-		$this->loadView('404');
+        $user = new User();
+
+        if (isset($_SESSION['userID']) && !empty($_SESSION['userID'])) {
+            $name = $user->getName($_SESSION['userID']);
+        } else {
+            $name = '';
+        }
+
+        $params = array(
+            'title' => 'E-commerce - Page not found',
+            'name' => $name
+        );
+
+		$this->loadTemplate('404', $params);
 	}
 }

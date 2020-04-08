@@ -67,8 +67,6 @@ class Core
 		}
 
 		// Instanciates controller and action
-		$c = new $currentController();
-
 		call_user_func_array(array($c, $currentAction), $params);	// $c->$currentAction($params);
 	}
 }
