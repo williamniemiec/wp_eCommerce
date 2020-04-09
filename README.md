@@ -57,3 +57,5 @@ This is a project about a website for e-Commerce. It is not a complete e-commerc
 ![addAd](https://github.com/williamniemiec/wp_eCommerce/blob/master/media/app/addAd.png?raw=true)
 #### Ad
 ![ad](https://github.com/williamniemiec/wp_eCommerce/blob/master/media/app/ad.png?raw=true)
+
+<b>Note:</b> All registered users have the password `test1234@A`
