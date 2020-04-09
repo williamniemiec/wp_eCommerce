@@ -30,7 +30,7 @@ This is a project about a website for e-Commerce. It is not a complete e-commerc
 | core | `Directory`| Contains the classes responsable for the MVC operations
 | db | `Directory`| Contains [the database of the application](https://github.com/williamniemiec/wp_eCommerce/tree/master/src/db)
 | models | `Directory`| Contains all application model classes
-| vendor| `Directory`| Folder created by Composer - responsable for classes autoload
+| vendor| `Directory`| Folder created by [Composer](https://getcomposer.org/) - responsable for classes autoload
 | views | `Directory`| Contains all application view classes
 | &#46;buildpath| `File`| File created by IDE
 | &#46;htaccess| `File`| Responsible for friendly url
