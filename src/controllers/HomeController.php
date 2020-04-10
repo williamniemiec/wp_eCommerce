@@ -16,8 +16,8 @@ class HomeController extends Controller
     //        Methods
     //-----------------------------------------------------------------------
     /*
-     @Override
-     */
+      @Override
+    */
 	public function index ()
 	{
 		$ad = new Ad();

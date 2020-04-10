@@ -14,8 +14,8 @@ class LoginController extends Controller
     //        Methods
     //-----------------------------------------------------------------------
     /*
-     @Override
-     */
+      @Override
+    */
 	public function index()
 	{
 	    $error = false;

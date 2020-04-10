@@ -15,8 +15,8 @@ class ProductController extends Controller
     //        Methods
     //-----------------------------------------------------------------------
     /*
-     @Override
-     */
+      @Override
+    */
 	public function index() { }
 
 	/**

@@ -16,8 +16,8 @@ class MyAdsController extends Controller
     //        Methods
     //-----------------------------------------------------------------------
     /*
-     @Override
-     */
+      @Override
+    */
     public function index()
     {
         if (empty($_SESSION['userID'])) {
