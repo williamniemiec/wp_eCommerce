@@ -19,7 +19,7 @@ This is a project about a website for e-Commerce. It is not a complete e-commerc
 |------- | --- | ----
 | media | `Directory`| Visual informations about the project
 | src | `Directory`| Contains all website files
-| .project| `File`| Contains all model application classes
+| .project| `File`| File created by IDE
 
 
 ### /src
