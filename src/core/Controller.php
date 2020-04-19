@@ -19,7 +19,7 @@ abstract class Controller
 	 * Shows a view.
 	 *
 	 * @param string $viewname View's name
-	 * @param array $viewData View's parameters
+	 * @param array $viewData [optional] View's parameters
 	 */
 	public function loadView ($viewName, $viewData = array())
 	{
@@ -31,7 +31,7 @@ abstract class Controller
 	 * Shows a view inside a template.
 	 *
 	 * @param string $viewname View's name
-	 * @param array $viewData View's parameters
+	 * @param array $viewData [optional] View's parameters
 	 */
 	public function loadTemplate ($viewName, $viewData = array())
 	{
